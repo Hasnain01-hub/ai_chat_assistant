@@ -24,8 +24,9 @@ Tools and technologies that are used in the project.
 2. Langchain
 3. LangGraph
 4. Huggingface API
-5. Pinecone
-6. Firebase
+5. Azure OpenAI LLM
+6. Pinecone
+7. Firebase
 
 ## Project Setup
 
