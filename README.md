@@ -12,10 +12,6 @@ Additionally, the platform incorporates the capability to generate images using 
 
 <img src="./working/Graph.png" width="1000">
 
-## Links
-
-- Prizes: [Link](./certificates/README.md)
-
 ## Technology stack
 
 Tools and technologies that are used in the project.
