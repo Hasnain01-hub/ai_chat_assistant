@@ -12,6 +12,10 @@ Additionally, the platform incorporates the capability to generate images using 
 
 <img src="./working/Graph.png" width="1000">
 
+## Links
+
+- Working: [Link](https://youtu.be/B-6wPgsLPEM)
+
 ## Technology stack
 
 Tools and technologies that are used in the project.
