@@ -50,8 +50,6 @@ Tools and technologies that are used in the project.
 
 ## Flowchart
 
-<img src="./working/flow.png" width="1000">
-
 <img src="./working/steps.png" width="1000">
 
 ## Applications
