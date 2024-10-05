@@ -28,7 +28,19 @@ const ChatHistory = ({ data }) => {
                     </div>
 
                     <div className="chat">
-                      <p>{item.message}</p>
+                      {item.img_data.img ? (
+                        <Image
+                          height={300}
+                          width={300}
+                          style={{
+                            margin: "5px auto",
+                          }}
+                          src={item.img_data.imgUrl}
+                          alt="history-image"
+                        />
+                      ) : (
+                        <p>{item.message}</p>
+                      )}
                     </div>
                   </div>
                 </div>

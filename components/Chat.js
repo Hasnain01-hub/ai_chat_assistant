@@ -2,13 +2,8 @@ import Image from "next/image";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { db, storage } from "../utils/Firebase";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 const Chat = ({
   chat,
   initialMessageState,
@@ -23,31 +18,101 @@ const Chat = ({
   imgState,
 }) => {
   console.log("message inside", chat);
-  // var messageArr = message.split("```");
 
-  const setsync = async (e, id) => {
+  const setsync = async (e, id, image) => {
     e.preventDefault();
-    console.log("id", id);
+    let img_data = {
+      img: false,
+    };
+    if (image) {
+      try {
+        const response = await fetch(chat[idx + 1]);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const blob = await response.blob();
+        console.log("blob", blob);
+        const formData = new FormData();
+        formData.append(
+          "file",
+          blob,
+          `${chat[idx].trim().split(" ").pop()}_${idx}.jpg`
+        );
+        const res = await axios.post(
+          "https://api.pinata.cloud/pinning/pinFileToIPFS",
+          formData,
+          {
+            maxBodyLength: Infinity,
+            headers: {
+              pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+              pinata_secret_api_key:
+                process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
+              "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+            },
+          }
+        );
+        const resData = await res.data;
+        console.log(resData);
+        img_data = {
+          imgUrl:
+            "https://copper-gigantic-minnow-346.mypinata.cloud/ipfs/" +
+            resData.IpfsHash,
+          timestamp: resData.Timestamp,
+          img: true,
+        };
+      } catch (error) {
+        console.log(error);
+      }
+    }
     if (data && data.length >= 0) {
       await db
         .collection("history")
         .doc(email)
         .set({
-          messages: [...data, { question: chat[id], message: chat[id + 1] }],
+          messages: [
+            ...data,
+            {
+              question: chat[id],
+              message: image ? "" : chat[id + 1],
+              img_data: img_data,
+            },
+          ],
         });
-      setdata([...data, { question: chat[id], message: chat[id + 1] }]);
+      setdata([
+        ...data,
+        {
+          question: chat[id],
+          message: image ? "" : chat[id + 1],
+          img_data: img_data,
+        },
+      ]);
     } else {
       await db
         .collection("history")
         .doc(email)
         .set({
-          messages: [{ question: ques, message: message }],
+          messages: [
+            {
+              question: ques,
+              message: image ? "" : message,
+              img_data: img_data,
+            },
+          ],
         });
-      setdata([...data, { question: chat[id], message: chat[id + 1] }]);
+      setdata([
+        ...data,
+        {
+          question: chat[id],
+          message: image ? "" : chat[id + 1],
+          img_data: img_data,
+        },
+      ]);
     }
+    toast.success("Success: Chat saved");
   };
   return (
     <>
+      {console.log("hehehe", imgState)}
       <div>
         <div className="container">
           <div className="chat__list">
@@ -133,19 +198,19 @@ const Chat = ({
                       }}
                     >
                       <p>{message}</p>
-                      {!imgState[idx + 1] && (
+                      {
                         <span>
                           <svg
                             style={{ width: "25px" }}
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                             fill="currentColor"
-                            onClick={(e) => setsync(e, idx)}
+                            onClick={(e) => setsync(e, idx, imgState[idx + 1])}
                           >
                             <path d="M5.46257 4.43262C7.21556 2.91688 9.5007 2 12 2C17.5228 2 22 6.47715 22 12C22 14.1361 21.3302 16.1158 20.1892 17.7406L17 12H20C20 7.58172 16.4183 4 12 4C9.84982 4 7.89777 4.84827 6.46023 6.22842L5.46257 4.43262ZM18.5374 19.5674C16.7844 21.0831 14.4993 22 12 22C6.47715 22 2 17.5228 2 12C2 9.86386 2.66979 7.88416 3.8108 6.25944L7 12H4C4 16.4183 7.58172 20 12 20C14.1502 20 16.1022 19.1517 17.5398 17.7716L18.5374 19.5674Z"></path>
                           </svg>
                         </span>
-                      )}
+                      }
                     </div>
                   </div>
                 </div>
@@ -183,6 +248,7 @@ const Chat = ({
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

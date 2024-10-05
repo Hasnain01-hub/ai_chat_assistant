@@ -6,7 +6,7 @@ This platform utilizes advanced semantic search algorithms to analyze and retrie
 
 The platform is designed to handle inputs across a diverse formats including images, YouTube links, and pdf files. For videos, it fetches metadata through the YouTube API, which is then effectively summarized using a LLM to provide concise and relevant content overviews. Similarly, the system is equipped to summarize content from images, ensuring a comprehensive and versatile user experience that accommodates various types of media.
 
-Additionally, the platform incorporates the capability to generate images using the Stable Diffusion algorithm, further enriching the user interaction experience by providing visual content generation based on textual prompts. The system also maintains a comprehensive chat history, allowing for continuity in interactions and the ability to reference past conversations.
+Additionally, the platform incorporates the capability to generate images using the Stable Diffusion algorithm, further enriching the user interaction experience by providing visual content generation based on textual prompts. The system stores generated images in Pinata (IPFS) and also maintains a comprehensive chat history, enabling seamless continuity in interactions and the ability to reference previous conversations when needed.
 
 ## Graph flow
 
@@ -23,10 +23,11 @@ Tools and technologies that are used in the project.
 1. NextJS
 2. Langchain
 3. LangGraph
-4. Huggingface API
-5. Azure OpenAI LLM
-6. Pinecone
-7. Firebase
+4. Pinata
+5. Huggingface API
+6. Azure OpenAI LLM
+7. Pinecone
+8. Firebase
 
 ## Project Setup
 
@@ -68,7 +69,7 @@ Tools and technologies that are used in the project.
 
 <img src="./working/chat.png" width="1000">
 
-<img src="./working/history.png" width="1000">
+<img src="./working/pinata-img.png" width="1000">
 
 <img src="./working/video-text.png" width="1000">
 
