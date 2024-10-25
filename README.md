@@ -1,4 +1,4 @@
-# AI Chat Assistant
+# MediaFusion
 
 ## Description
 
